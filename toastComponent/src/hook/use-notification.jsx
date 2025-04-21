@@ -1,0 +1,27 @@
+import { useCallback, useState } from "react";
+import Notification from "../components/Notification";
+
+const useNotification = (position = 'top-right') => {
+    const [notification, setNotification] = useState(null)
+
+    let timer;
+
+    const triggerNotification = useCallback((notificationProps) => {
+        clearTimeout(timer)
+        setNotification(notificationProps)
+        timer = setTimeout(() => {
+            setNotification(null)
+        }, notificationProps.duration)
+    }, [])
+
+    const NotificationComp = notification ? (
+        <div className={`${position}`}>
+            <Notification {...notification} />
+        </div>
+    ) : (
+        null
+    )
+    return { NotificationComp, triggerNotification }
+}
+
+export default useNotification;
